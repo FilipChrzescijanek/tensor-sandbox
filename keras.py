@@ -4,6 +4,7 @@ from tensorflow.python.keras.models import Model, Sequential
 from tensorflow.python.keras.optimizers import SGD
 from tensorflow.python.keras.callbacks import EarlyStopping, LambdaCallback
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.python.keras import backend as K
 
 def inception(input_shape, num_classes):
 	input_img = Input(shape=input_shape)
@@ -18,8 +19,13 @@ def inception(input_shape, num_classes):
 
 	tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(input_img)
 	tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
-
-	output = concatenate([convolutions, tower_1, tower_2, tower_3], axis=1)
+	
+	if K.image_data_format() == 'channels_first':
+		channel_axis = 1
+	else:
+		channel_axis = 3
+	
+	output = concatenate([convolutions, tower_1, tower_2, tower_3], axis=channel_axis)
 	output = Flatten()(output)
 	out = Dense(num_classes, activation='softmax')(output)
 
