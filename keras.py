@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.python.keras.layers import Input, Dense, Dropout, Flatten, Conv2D, MaxPooling2D, concatenate
-from tensorflow.python.keras.models import Model
+from tensorflow.python.keras.models import Model, Sequential
 from tensorflow.python.keras.optimizers import SGD
 from tensorflow.python.keras.callbacks import EarlyStopping, LambdaCallback
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
