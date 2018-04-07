@@ -8,8 +8,6 @@ from tensorflow.python.keras import backend as K
 
 def inception(input_shape, num_classes):
 	input_img = Input(shape=input_shape)
-	
-	convolutions = Conv2D(64, (1, 1), padding='same', activation='relu')(input_img)
 
 	tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_img)
 	tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')(tower_1)
@@ -25,8 +23,10 @@ def inception(input_shape, num_classes):
 	else:
 		channel_axis = 3
 	
-	output = concatenate([convolutions, tower_1, tower_2, tower_3], axis=channel_axis)
+	output = concatenate([tower_1, tower_2, tower_3], axis=channel_axis)
 	output = Flatten()(output)
+	output = Dense(128, activation='relu')(output)
+	output = Dropout(0.4)(output)
 	out = Dense(num_classes, activation='softmax')(output)
 
 	model = Model(inputs=input_img, outputs=out)
