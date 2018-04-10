@@ -83,12 +83,14 @@ validation_generator = datagen.flow_from_directory(
 	color_mode='grayscale',
 	batch_size=batch_size)
 
+early_stopping = EarlyStopping()
+	
 model.fit_generator(
 	train_generator,  
 	steps_per_epoch=steps, 
 	epochs=epochs, 
 	validation_data=validation_generator,
-	validation_steps=val_steps)
-
-scores = model.evaluate_generator(validation_generator)
-print("Accuracy: %.2f%%" % (scores[1]*100))
+	validation_steps=val_steps,
+	callbacks=[early_stopping])
+	
+model.save('higseg.h5')
