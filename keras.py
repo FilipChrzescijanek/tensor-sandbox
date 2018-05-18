@@ -126,7 +126,7 @@ def a5(input_shape, num_classes):
 
 input_shape = (56, 56, 1)
 num_classes = 3
-epochs = 25
+epochs = 10
 steps = 2000
 val_steps = 800
 lrate = 0.01
@@ -162,14 +162,14 @@ validation_generator = datagen.flow_from_directory(
 	color_mode='grayscale',
 	batch_size=batch_size)
 
-early_stopping = EarlyStopping()
+#early_stopping = EarlyStopping()
 	
 model.fit_generator(
 	train_generator,  
 	steps_per_epoch=steps, 
 	epochs=epochs, 
 	validation_data=validation_generator,
-	validation_steps=val_steps,
-	callbacks=[early_stopping])
+	validation_steps=val_steps)
+	#callbacks=[early_stopping])
 	
 model.save('higseg.h5')
