@@ -5,34 +5,8 @@ from tensorflow.python.keras.optimizers import SGD
 from tensorflow.python.keras.callbacks import EarlyStopping, LambdaCallback
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras import backend as K
-
-def inception(input_shape, num_classes):
-	input_img = Input(shape=input_shape)
-
-	tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_img)
-	tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')(tower_1)
-
-	tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_img)
-	tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')(tower_2)
-
-	tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(input_img)
-	tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
 	
-	if K.image_data_format() == 'channels_first':
-		channel_axis = 1
-	else:
-		channel_axis = 3
-	
-	output = concatenate([tower_1, tower_2, tower_3], axis=channel_axis)
-	output = Flatten()(output)
-	output = Dense(128, activation='relu')(output)
-	output = Dropout(0.4)(output)
-	out = Dense(num_classes, activation='softmax')(output)
-
-	model = Model(inputs=input_img, outputs=out)
-	return model
-	
-def basic(input_shape, num_classes):
+def a1(input_shape, num_classes):
 	model = Sequential()
 	
 	model.add(Conv2D(32, (5, 5), padding='same', activation='relu', input_shape=input_shape))
@@ -48,6 +22,108 @@ def basic(input_shape, num_classes):
 	
 	return model
 
+def a2(input_shape, num_classes):
+	input_img = Input(shape=input_shape)
+
+	sequential = Conv2D(32, (5, 5), padding='same', activation='relu')(input_img)
+	sequential = MaxPooling2D(pool_size=(2, 2))(sequential)
+	
+	sequential = Conv2D(64, (5, 5), padding='same', activation='relu')(sequential)
+	sequential = MaxPooling2D(pool_size=(2, 2))(sequential)
+	
+	tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')(sequential)
+	tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')(tower_1)
+
+	tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')(sequential)
+	tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')(tower_2)
+
+	tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(sequential)
+	tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
+	
+	if K.image_data_format() == 'channels_first':
+		channel_axis = 1
+	else:
+		channel_axis = 3
+	
+	output = concatenate([tower_1, tower_2, tower_3], axis=channel_axis)
+	output = Flatten()(output)
+	output = Dense(1024, activation='relu')(output)
+	output = Dropout(0.4)(output)
+	out = Dense(num_classes, activation='softmax')(output)
+
+	model = Model(inputs=input_img, outputs=out)
+	return model
+	
+def a3(input_shape, num_classes):
+	model = Sequential()
+	
+	model.add(Conv2D(32, (5, 5), padding='same', activation='relu', input_shape=input_shape))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
+	
+	model.add(Conv2D(64, (5, 5), padding='same', activation='relu'))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
+	
+	model.add(Conv2D(128, (5, 5), padding='same', activation='relu'))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
+	
+	model.add(Flatten())
+	model.add(Dense(1024, activation='relu'))
+	model.add(Dropout(0.4))
+	model.add(Dense(num_classes, activation='softmax'))
+	
+	return model
+	
+def a4(input_shape, num_classes):
+	model = Sequential()
+	
+	model.add(Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=input_shape))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
+	
+	model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
+	
+	model.add(Conv2D(128, (3, 3), padding='same', activation='relu'))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
+	
+	model.add(Flatten())
+	model.add(Dense(1024, activation='relu'))
+	model.add(Dropout(0.4))
+	model.add(Dense(num_classes, activation='softmax'))
+	
+	return model
+
+def a5(input_shape, num_classes):
+	input_img = Input(shape=input_shape)
+
+	sequential = Conv2D(32, (3, 3), padding='same', activation='relu')(input_img)
+	sequential = MaxPooling2D(pool_size=(2, 2))(sequential)
+	
+	sequential = Conv2D(64, (3, 3), padding='same', activation='relu')(sequential)
+	sequential = MaxPooling2D(pool_size=(2, 2))(sequential)
+	
+	tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')(sequential)
+	tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')(tower_1)
+
+	tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')(sequential)
+	tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')(tower_2)
+
+	tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(sequential)
+	tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
+	
+	if K.image_data_format() == 'channels_first':
+		channel_axis = 1
+	else:
+		channel_axis = 3
+	
+	output = concatenate([tower_1, tower_2, tower_3], axis=channel_axis)
+	output = Flatten()(output)
+	output = Dense(1024, activation='relu')(output)
+	output = Dropout(0.4)(output)
+	out = Dense(num_classes, activation='softmax')(output)
+
+	model = Model(inputs=input_img, outputs=out)
+	return model
+
 input_shape = (56, 56, 1)
 num_classes = 3
 epochs = 25
@@ -58,8 +134,11 @@ batch_size = 32
 decay = lrate / epochs
 sgd = SGD(lr=lrate, momentum=0.9, decay=decay)
 
-#model = basic(input_shape, num_classes)
-model = inception(input_shape, num_classes)
+model = a1(input_shape, num_classes)
+#model = a2(input_shape, num_classes)
+#model = a3(input_shape, num_classes)
+#model = a4(input_shape, num_classes)
+#model = a5(input_shape, num_classes)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
 datagen = ImageDataGenerator(
